@@ -27,8 +27,8 @@ typedef Word Register; /* unsigned 32-bit*/
     32 registers
     LO & HI special registers
     PC program counter */
-typedef struct {
-    Register R[32];
+typedef struct {     
+    Register R[32];    // Processor is a struct with the PC register and an array of 32 registers
     Register PC;
 } Processor;
 

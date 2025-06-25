@@ -157,8 +157,8 @@ void write_rtype(Instruction instruction) {
 
 void write_itype_except_load(Instruction instruction) {
     int immShifted = (instruction.itype.imm >> 5);  
-    int imm11_5 = immShifted & ((1U << 7) - 1); // Use bitmasking to extract immediate bits for slli, srli, and srai instructions
-    int immForSRAIandSRLI = instruction.itype.imm & ((1U << 5) - 1); // Use bitmasking to extract funct7 bits for slli, srli, and srai instructions
+    int imm11_5 = immShifted & ((1U << 7) - 1); // Use bitmasking to extract funct7 bits for slli, srli, and srai instructions
+    int immForSRAIandSRLI = instruction.itype.imm & ((1U << 5) - 1); // Use bitmasking to extract immediate bits for slli, srli, and srai instructions
     switch (instruction.itype.funct3) {
         case 0x0:
             print_itype_except_load("addi", instruction, instruction.itype.imm); // Use print function to print instruction with desired name
