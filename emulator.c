@@ -239,7 +239,7 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
         case 0x4:
             //xori
             processor->R[instruction.itype.rd] = 
-            (processor->R[instruction.itype.rs1]) ^ (sign_extend_number(instruction.itype.imm, 12));
+            (processor->R[instruction.itype.rs1]) ^ instruction.itype.imm;
             break;
 
         case 0x5:
@@ -345,6 +345,7 @@ void execute_load(Instruction instruction, Processor *processor, Byte *memory) {
             processor->R[instruction.itype.rd] = sign_extend_number(load(memory, offsetAddress, LENGTH_BYTE), 8);  // Load in signed extended byte from offsetted address
             break;
         case 0x1:
+            //printf ("Memory: %d\n", sign_extend_number((memory[offsetAddress+1] << 8) + memory[offsetAddress], 16));
             processor->R[instruction.itype.rd] = sign_extend_number(load(memory, offsetAddress, LENGTH_HALF_WORD), 16);  // Load in signed extended half-word from offsetted address
             break;
         case 0x2:
@@ -394,12 +395,12 @@ void store(Byte *memory, Address address, Alignment alignment, Word value) {
          memory[address] = value & ((1U << 8) - 1);
     } else if(alignment == LENGTH_HALF_WORD) {
         memory[address] = value & ((1U << 8) - 1);
-        memory[address+1] = (value << 8) & ((1U << 8) - 1);  // Address +1 is address with 1 byte offset
+        memory[address+1] = (value >> 8) & ((1U << 8) - 1);  // Address +1 is address with 1 byte offset
     } else if(alignment == LENGTH_WORD) {
         memory[address] = value & ((1U << 8) - 1);
-        memory[address+1] = (value << 8) & ((1U << 8) - 1);
-        memory[address+2] = (value << 16) & ((1U << 8) - 1);
-        memory[address+3] = (value << 24) & ((1U << 8) - 1);
+        memory[address+1] = (value >> 8) & ((1U << 8) - 1);
+        memory[address+2] = (value >> 16) & ((1U << 8) - 1);
+        memory[address+3] = (value >> 24) & ((1U << 8) - 1);
         
     } else {
         printf("Error: Unrecognized alignment %d\n", alignment);
