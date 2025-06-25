@@ -275,10 +275,7 @@ void execute_itype_except_load(Instruction instruction, Processor *processor) {
             break;
     }
 
-    //update PC IM NOT SURE ABOUT THIS
-    ///////////
-    //////////
-    /////////
+    //update PC
     processor->PC += 4;
 }
 
@@ -317,13 +314,21 @@ void execute_branch(Instruction instruction, Processor *processor) {
     switch (instruction.sbtype.funct3) {
         /* YOUR CODE HERE */
         case 0x0:
+            //beq
             if(processor->R[instruction.sbtype.rs1] == processor->R[instruction.sbtype.rs2]){
-                processor->PC = processor->PC + (get_branch_offset(instruction) << 1);
+                processor->PC = processor->PC + (get_branch_offset(instruction));
+            }
+            else{
+                processor->PC +=4 ;
             }
             break;
         case 0x1:
+            //bne
             if(processor->R[instruction.sbtype.rs1] != processor->R[instruction.sbtype.rs2]){
-                processor->PC = processor->PC + (get_branch_offset(instruction) << 1);
+                processor->PC = processor->PC + (get_branch_offset(instruction));
+            }
+            else{
+                processor->PC += 4;
             }
             break;
         default:
